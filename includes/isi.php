@@ -338,10 +338,10 @@
                     <?php
                       $conn = new mysqli('localhost', 'root', '', 'ppsi');
                       // include koneksi.php
-                      $sql6 = "SELECT a.id, b.nama AS nama_barang, p.nama AS nama_pasar, a.harga, a.tanggal_input FROM harga_barang a JOIN barang b ON a.barang_id=b.id JOIN pasar p ON a.pasar_id=p.id WHERE a.barang_id = '7'";
-                      $nama_barang6 = $conn->query($sql6);
-                      $nama_pasar6 = $conn->query($sql6);
-                      $harga6 = $conn->query($sql6);
+                      $sql7 = "SELECT a.id, b.nama AS nama_barang, p.nama AS nama_pasar, a.harga, a.tanggal_input FROM harga_barang a JOIN barang b ON a.barang_id=b.id JOIN pasar p ON a.pasar_id=p.id WHERE a.barang_id = '7'";
+                      $nama_barang6 = $conn->query($sql7);
+                      $nama_pasar6 = $conn->query($sql7);
+                      $harga6 = $conn->query($sql7);
                     ?>
                         <canvas class="my-4 w-100" id="myLineChart7" width="900" height="500"></canvas>
                        
@@ -387,10 +387,10 @@
                     <?php
                       $conn = new mysqli('localhost', 'root', '', 'ppsi');
                       // include koneksi.php
-                      $sql6 = "SELECT a.id, b.nama AS nama_barang, p.nama AS nama_pasar, a.harga, a.tanggal_input FROM harga_barang a JOIN barang b ON a.barang_id=b.id JOIN pasar p ON a.pasar_id=p.id WHERE a.barang_id = '8'";
-                      $nama_barang6 = $conn->query($sql6);
-                      $nama_pasar6 = $conn->query($sql6);
-                      $harga6 = $conn->query($sql6);
+                      $sql8 = "SELECT a.id, b.nama AS nama_barang, p.nama AS nama_pasar, a.harga, a.tanggal_input FROM harga_barang a JOIN barang b ON a.barang_id=b.id JOIN pasar p ON a.pasar_id=p.id WHERE a.barang_id = '8'";
+                      $nama_barang6 = $conn->query($sql8);
+                      $nama_pasar6 = $conn->query($sql8);
+                      $harga6 = $conn->query($sql8);
                     ?>
                         <canvas class="my-4 w-100" id="myLineChart8" width="900" height="500"></canvas>
                       </div>
@@ -412,76 +412,90 @@
     <!-- SCRIPT MENAMPILKAN DASHBOARD -->
     <script>
         var ctx = document.getElementById("myLineChart1");
-var hargaData = [<?php while($a = mysqli_fetch_array($harga1)) { echo $a['harga'] . ', '; } ?>];
-var borderColorArray = [];
-
-for (var i = 0; i < hargaData.length; i++) {
-    if (i > 0) {
-        // Bandingkan harga saat ini dengan harga sebelumnya
-        if (hargaData[i] > hargaData[i - 1]) {
-            borderColorArray.push('#00ff00'); // Warna jika harga naik (contoh: hijau)
-        } else if (hargaData[i] < hargaData[i - 1]) {
-            borderColorArray.push('#ff0000'); // Warna jika harga turun (contoh: merah)
-        } else {
-            borderColorArray.push('#007bff'); // Warna default jika harga sama
-        }
-    } else {
-        borderColorArray.push('#007bff'); // Warna default untuk indeks pertama
-    }
-}
-
-var myLineChart1 = new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: [<?php while($b = mysqli_fetch_array($nama_barang1)) { echo '"' . $b['tanggal_input'] . '",'; } ?>],
-        datasets: [{
-            data: hargaData,
-            lineTension: 0,
-            backgroundColor: 'transparent',
-            borderColor: borderColorArray,
-            borderWidth: 5,
-        }]
-    },
-    options: {
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true
+        var hargaData = [<?php while($a = mysqli_fetch_array($harga1)) { echo $a['harga'] . ', '; } ?>];
+        var borderColorArray = [];
+                          
+        for (var i = 0; i < hargaData.length; i++) {
+            if (i > 0) {
+                // Bandingkan harga saat ini dengan harga sebelumnya
+                if (hargaData[i] > hargaData[i - 1]) {
+                    borderColorArray.push('#00ff00'); // Warna jika harga naik (contoh: hijau)
+                } else if (hargaData[i] < hargaData[i - 1]) {
+                    borderColorArray.push('#ff0000'); // Warna jika harga turun (contoh: merah)
+                } else {
+                    borderColorArray.push('(hargaData[i] > hargaData[i - 1])'); // Warna default jika harga sama
                 }
-            }]
+            } else {
+                borderColorArray.push('#007bff'); // Warna default untuk indeks pertama
+            }
         }
-    }
-});
-
-        var ctx = document.getElementById("myLineChart2");
-        var myLineChart2 = new Chart(ctx, {
-            type: 'bar',
+        
+        var myLineChart1 = new Chart(ctx, {
+            type: 'line',
             data: {
-                
-                labels: [<?php while($b = mysqli_fetch_array($nama_barang2)) { echo '"' . $b['tanggal_input'] . '",'; } ?>], //keterangan nama-nama label],
-               
+                labels: [<?php while($b = mysqli_fetch_array($nama_barang1)) { echo '"' . $b['tanggal_input'] . '",'; } ?>],
                 datasets: [{
-                    
-                    data: [<?php while($a = mysqli_fetch_array($harga2)) { echo $a['harga'] . ', '; } ?>], //Data Grafik
-            
-                        
+                    data: hargaData,
                     lineTension: 0,
                     backgroundColor: 'transparent',
-                    borderColor: '#00ff00',
-                    borderWidth: 4,
-                    pointBackgroundColor: '#ff0000'
+                    borderColor: borderColorArray,
+                    borderWidth: 5,
                 }]
             },
             options: {
                 scales: {
                     yAxes: [{
                         ticks: {
-                            beginAtZero:true
+                            beginAtZero: true
                         }
                     }]
                 }
             }
         });
+
+        var ctx = document.getElementById("myLineChart2");
+        var hargaData2 = [<?php while($a = mysqli_fetch_array($harga2)) { echo $a['harga'] . ', '; } ?>];
+        var borderColorArray = [];
+                          
+        for (var i = 0; i < hargaData.length; i++) {
+            if (i > 0) {
+                // Bandingkan harga saat ini dengan harga sebelumnya
+                if (hargaData2[i] > hargaData2[i - 1]) {
+                    borderColorArray.push('#00ff00'); // Warna jika harga naik (contoh: hijau)
+                } else if (hargaData2[i] < hargaData2[i - 1]) {
+                    borderColorArray.push('#ff0000'); // Warna jika harga turun (contoh: merah)
+                } else {
+                    borderColorArray.push('#007bff'); // Warna default jika harga sama
+                }
+            } else {
+                borderColorArray.push('#007bff'); // Warna default untuk indeks pertama
+            }
+        }
+        
+        var myLineChart2 = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [<?php while($b = mysqli_fetch_array($nama_barang2)) { echo '"' . $b['tanggal_input'] . '",'; } ?>],
+                datasets: [{
+                    data: hargaData2,
+                    lineTension: 0,
+                    backgroundColor: 'transparent',
+                    borderColor: borderColorArray,
+                    borderWidth: 5,
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+
+
         var ctx = document.getElementById("myLineChart3");
         var myLineChart3 = new Chart(ctx, {
             type: 'line',
@@ -496,7 +510,7 @@ var myLineChart1 = new Chart(ctx, {
                         
                     lineTension: 0,
                     backgroundColor: 'transparent',
-                    borderColor: '#ff0000',
+                    borderColor: '#007bff',
                     borderWidth: 4,
                     pointBackgroundColor: '#007bff'
                 }]
@@ -541,6 +555,93 @@ var myLineChart1 = new Chart(ctx, {
             }
         });
         var ctx = document.getElementById("myLineChart5");
+        var myLineChart5 = new Chart(ctx, {
+            type: 'line',
+            data: {
+                
+                labels: [<?php while($b = mysqli_fetch_array($nama_barang5)) { echo '"' . $b['tanggal_input'] . '",'; } ?>], //keterangan nama-nama label],
+               
+                datasets: [{
+                    
+                    data: [<?php while($a = mysqli_fetch_array($harga5)) { echo $a['harga'] . ', '; } ?>], //Data Grafik
+            
+                        
+                    lineTension: 0,
+                    backgroundColor: 'transparent',
+                    borderColor: '#007bff',
+                    borderWidth: 4,
+                    pointBackgroundColor: '#007bff'
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero:true
+                        }
+                    }]
+                }
+            }
+        });
+        var ctx = document.getElementById("myLineChart6");
+        var myLineChart5 = new Chart(ctx, {
+            type: 'line',
+            data: {
+                
+                labels: [<?php while($b = mysqli_fetch_array($nama_barang5)) { echo '"' . $b['tanggal_input'] . '",'; } ?>], //keterangan nama-nama label],
+               
+                datasets: [{
+                    
+                    data: [<?php while($a = mysqli_fetch_array($harga5)) { echo $a['harga'] . ', '; } ?>], //Data Grafik
+            
+                        
+                    lineTension: 0,
+                    backgroundColor: 'transparent',
+                    borderColor: '#007bff',
+                    borderWidth: 4,
+                    pointBackgroundColor: '#007bff'
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero:true
+                        }
+                    }]
+                }
+            }
+        });
+        var ctx = document.getElementById("myLineChart7");
+        var myLineChart5 = new Chart(ctx, {
+            type: 'line',
+            data: {
+                
+                labels: [<?php while($b = mysqli_fetch_array($nama_barang5)) { echo '"' . $b['tanggal_input'] . '",'; } ?>], //keterangan nama-nama label],
+               
+                datasets: [{
+                    
+                    data: [<?php while($a = mysqli_fetch_array($harga5)) { echo $a['harga'] . ', '; } ?>], //Data Grafik
+            
+                        
+                    lineTension: 0,
+                    backgroundColor: 'transparent',
+                    borderColor: '#007bff',
+                    borderWidth: 4,
+                    pointBackgroundColor: '#007bff'
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero:true
+                        }
+                    }]
+                }
+            }
+        });
+        var ctx = document.getElementById("myLineChart8");
         var myLineChart5 = new Chart(ctx, {
             type: 'line',
             data: {
