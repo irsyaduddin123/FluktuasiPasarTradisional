@@ -413,7 +413,27 @@
     <script>
         var ctx = document.getElementById("myLineChart1");
         var hargaData = [<?php while($a = mysqli_fetch_array($harga1)) { echo $a['harga'] . ', '; } ?>];
+        var namaBarangData = [<?php while($b = mysqli_fetch_array($nama_barang1)) { echo '"' . $b['tanggal_input'] . '",'; } ?>];
         var borderColorArray = [];
+
+        // Membuat array objek untuk pengurutan
+        var combinedData = [];
+        for (var i = 0; i < hargaData.length; i++) {
+            combinedData.push({ harga: hargaData[i], tanggal: namaBarangData[i] });
+        }
+
+        // Mengurutkan array combinedData berdasarkan tanggal
+        combinedData.sort(function(a, b) {
+            // Konversi tanggal ke objek Date untuk membandingkan
+            var dateA = new Date(a.tanggal);
+            var dateB = new Date(b.tanggal);
+        
+            return dateA - dateB;
+        });
+        
+        // Mengekstrak array hargaData dan namaBarangData yang telah diurutkan
+        hargaData = combinedData.map(item => item.harga);
+        namaBarangData = combinedData.map(item => item.tanggal);
                           
         for (var i = 0; i < hargaData.length; i++) {
             if (i > 0) {
@@ -433,7 +453,7 @@
         var myLineChart1 = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: [<?php while($b = mysqli_fetch_array($nama_barang1)) { echo '"' . $b['tanggal_input'] . '",'; } ?>],
+                labels: namaBarangData,
                 datasets: [{
                     data: hargaData,
                     lineTension: 0,
@@ -455,9 +475,29 @@
 
         var ctx = document.getElementById("myLineChart2");
         var hargaData2 = [<?php while($a = mysqli_fetch_array($harga2)) { echo $a['harga'] . ', '; } ?>];
+        var namaBarangData = [<?php while($b = mysqli_fetch_array($nama_barang2)) { echo '"' . $b['tanggal_input'] . '",'; } ?>];
         var borderColorArray = [];
+
+        // Membuat array objek untuk pengurutan
+        var combinedData = [];
+        for (var i = 0; i < hargaData2.length; i++) {
+            combinedData.push({ harga: hargaData2[i], tanggal: namaBarangData[i] });
+        }
+
+        // Mengurutkan array combinedData berdasarkan tanggal
+        combinedData.sort(function(a, b) {
+            // Konversi tanggal ke objek Date untuk membandingkan
+            var dateA = new Date(a.tanggal);
+            var dateB = new Date(b.tanggal);
+        
+            return dateA - dateB;
+        });
+
+        // Mengekstrak array hargaData dan namaBarangData yang telah diurutkan
+        hargaData2 = combinedData.map(item => item.harga);
+        namaBarangData = combinedData.map(item => item.tanggal);
                           
-        for (var i = 0; i < hargaData.length; i++) {
+        for (var i = 0; i < hargaData2.length; i++) {
             if (i > 0) {
                 // Bandingkan harga saat ini dengan harga sebelumnya
                 if (hargaData2[i] > hargaData2[i - 1]) {
@@ -475,7 +515,7 @@
         var myLineChart2 = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: [<?php while($b = mysqli_fetch_array($nama_barang2)) { echo '"' . $b['tanggal_input'] . '",'; } ?>],
+                labels: namaBarangData,
                 datasets: [{
                     data: hargaData2,
                     lineTension: 0,
