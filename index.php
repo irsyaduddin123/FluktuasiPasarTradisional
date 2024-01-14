@@ -11,7 +11,7 @@
   include('includes/isi.php'); 
   ?>
   	
-  <?php include 'includes/footer.php'; ?>
+  <?php //include 'includes/footer.php'; ?>
 
 </div>
 
