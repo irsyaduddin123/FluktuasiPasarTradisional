@@ -209,6 +209,8 @@
                       </div>
                   </div>
                 </div>
+                <h5 id="hargarendah4"></h5>
+                <h5 id="hargatinggi4"></h5>
             </div>
           </div>
         </div>
@@ -591,6 +593,7 @@
                     backgroundColor: 'transparent',
                     borderColor: borderColorArray,
                     borderWidth: 5,
+                    label: 'Harga Ikan'
                 }]
             },
             options: {
@@ -682,6 +685,7 @@
                     backgroundColor: 'transparent',
                     borderColor: borderColorArray,
                     borderWidth: 5,
+                    label: 'Harga Daging'
 
                 }]
             },
@@ -703,23 +707,77 @@
                 }
             }
         });
+
+        
         var ctx = document.getElementById("myLineChart4");
+        var hargaData4 = [<?php while($a = mysqli_fetch_array($harga4)) { echo $a['harga'] . ', '; } ?>];
+        var namaBarangData = [<?php while($b = mysqli_fetch_array($nama_barang4)) { echo '"' . $b['tanggal_input'] . '",'; } ?>];
+        var namaPasarData = [<?php while($c = mysqli_fetch_array($nama_pasar4)) { echo '"' . $c['nama_pasar'] . '",'; } ?>];
+
+        var borderColorArray = [];
+        var lowestPriceColor = '#00ff00'; // Anda dapat menetapkan warna yang diinginkan untuk titik data harga terendah
+
+        // Membuat array objek untuk pengurutan
+        var combinedData = [];
+        for (var i = 0; i < hargaData4.length; i++) {
+            combinedData.push({ harga: hargaData4[i], tanggal: namaBarangData[i], pasar: namaPasarData[i] });
+        }
+
+        // Mengurutkan array combinedData berdasarkan tanggal
+        combinedData.sort(function(a, b) {
+            // Konversi tanggal ke objek Date untuk membandingkan
+            var dateA = new Date(a.tanggal);
+            var dateB = new Date(b.tanggal);
+        
+            return dateA - dateB;
+        });
+
+        // Mengekstrak array hargaData4 dan namaBarangData yang telah diurutkan
+        hargaData4 = combinedData.map(item => item.harga);
+        namaBarangData = combinedData.map(item => item.tanggal);
+        namaPasarData = combinedData.map(item => item.pasar);
+
+        var minPriceIndex = hargaData4.indexOf(Math.min(...hargaData4));
+        var maxPriceIndex = hargaData4.indexOf(Math.max(...hargaData4));
+        var lowestPasar = namaPasarData[minPriceIndex]; //pasar terendah
+        var highPasar = namaPasarData[maxPriceIndex]; //pasar tertinggi
+        var lowestHarga = Math.min(...hargaData4); //var harga rendah
+        var highHarga = Math.max(...hargaData4);
+
+
+        // Menampilkan nama pasar dan harga terendah di elemen H4
+        document.getElementById('hargarendah4').innerHTML =' Harga Terendah: Rp ' + lowestHarga + ' ada di ' + lowestPasar;
+        document.getElementById('hargatinggi4').innerHTML =' Harga Tertinggi: Rp ' + highHarga + ' ada di ' + highPasar;
+
+
+        for (var i = 0; i < hargaData4.length; i++) {
+            if (i > 0) {
+                // Bandingkan harga saat ini dengan harga sebelumnya
+                if (hargaData4[i] > hargaData4[i - 1]) {
+                    borderColorArray.push('#00ff00'); // Warna jika harga naik (contoh: hijau)
+                } else if (hargaData4[i] < hargaData4[i - 1]) {
+                    borderColorArray.push('#ff0000'); // Warna jika harga turun (contoh: merah)
+                } else {
+                    borderColorArray.push('(hargaData4[i] > hargaData4[i - 1])'); // Warna default jika harga sama
+                }
+            } else {
+                borderColorArray.push('#007bff'); // Warna default untuk indeks pertama
+            }
+        }
         var myLineChart4 = new Chart(ctx, {
             type: 'line',
             data: {
                 
-                labels: [<?php while($b = mysqli_fetch_array($nama_barang4)) { echo '"' . $b['tanggal_input'] . '",'; } ?>], //keterangan nama-nama label],
-               
+                labels: namaBarangData,
                 datasets: [{
-                  label: 'KACANG', // judul grafik
-                    data: [<?php while($a = mysqli_fetch_array($harga4)) { echo $a['harga'] . ', '; } ?>], //Data Grafik
-            
-                        
+                    
+                    data: hargaData4,                        
                     lineTension: 0,
                     backgroundColor: 'transparent',
-                    borderColor: '#007bff',
-                    borderWidth: 4,
-                    pointBackgroundColor: '#007bff'
+                    borderColor: borderColorArray,
+                    borderWidth: 5,
+                    label: 'Harga Minyak'
+
                 }]
             },
             options: {
@@ -729,9 +787,20 @@
                             beginAtZero:true
                         }
                     }]
+                },
+                tooltips: {
+                    callbacks: {
+                        label: function (tooltipItem, data) {
+                            var datasetLabel = data.datasets[tooltipItem.datasetIndex].label || '';
+                            return datasetLabel + ': ' + tooltipItem.yLabel + ' - ' + namaPasarData[tooltipItem.index];
+                        }
+                    }
                 }
             }
         });
+
+
+
         var ctx = document.getElementById("myLineChart5");
         var myLineChart5 = new Chart(ctx, {
             type: 'line',
