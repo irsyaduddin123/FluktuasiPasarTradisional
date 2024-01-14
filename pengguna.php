@@ -57,8 +57,8 @@
                 <thead>
                   <th>Nama Barang</th>
                   <th>Lokasi Barang</th>
-                  <th>Harga Barang (Rp.)</th>
-                  <th>Tanggal Input</th>
+                  <th>Harga Barang </th>
+                  <th>Tanggal masuk</th>
                 </thead>
                 <tbody>
                   <?php
