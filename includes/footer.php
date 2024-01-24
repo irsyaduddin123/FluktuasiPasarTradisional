@@ -1,4 +1,4 @@
 <footer class="main-footer">
-    <div class="container">
+    <div class="container"><?php include ('includes/footer.inc.php'); ?>
     </div>
 </footer>

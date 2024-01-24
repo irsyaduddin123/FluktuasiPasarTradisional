@@ -5,13 +5,11 @@
 
 	<?php include 'includes/navbar.php'; ?>
 	 
-
-  <?php 
-  // include('includes/header.inc.php'); 
-  include('includes/isi.php'); 
-  ?>
-  	
-  <?php //include 'includes/footer.php'; ?>
+  
+  <?php include('includes/grafikmenu.php');  ?>
+  
+  <?php include('includes/isi.php'); ?>
+  <?php include ('includes/footer.php'); ?>
 
 </div>
 

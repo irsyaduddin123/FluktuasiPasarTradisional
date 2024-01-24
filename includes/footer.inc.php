@@ -1,7 +1,6 @@
-    <footer class="bg-white text-dark font-weight-bold">
+    <footer class="bg-white text-dark font-weight-bold-" style="color: black;">
       <div class="container-fluid text-center">
-        <span
-          >Made With <3 by Kelompok A1</span
+        <span>Made With by Kelompok 4</span
         >
       </div>
     </footer>
