@@ -6,7 +6,8 @@
 	<?php include 'includes/navbar.php'; ?>
 	 
   
-  <?php include('includes/grafikmenu.php');  ?>
+   <!-- include('includes/grafikmenu.php');  ?> -->
+  <?php include('includes/pilihgrafik.php');  ?>
   
   <?php include('includes/isi.php'); ?>
   <?php include ('includes/footer.php'); ?>

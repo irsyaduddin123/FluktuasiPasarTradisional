@@ -64,6 +64,10 @@
           <div class="box">
           <div class="box-header with-border">
             <a href="#addnew" data-toggle="modal" class="btn btn-primary btn-sm btn-flat" id="addharga"><i class="fa fa-plus"></i> Tambah Data Baru</a>
+
+            <!-- <a href="#download" class="btn btn-primary btn-sm btn-flat" id="download"><i class="fa fa-users"></i> Report</a> -->
+
+
             </div>
             <div class="box-body">
               <table id="example1" class="table table-bordered">
@@ -120,6 +124,7 @@
 
 <?php include 'includes/scripts.php'; ?>
 <script>
+
 $(function(){
   $(document).on('click', '.edit', function(e){
     e.preventDefault();
@@ -134,6 +139,16 @@ $(function(){
     var id = $(this).data('id');
     getRow(id);
   });
+
+  $(document).on('click','#download', function(e){
+    e.preventDefault();
+    $.ajax({
+    type: 'POST',
+    url: 'Report.php',
+    dataType: 'json',
+    
+  });
+  })
 
   $('#addharga').click(function(e){
     e.preventDefault();
@@ -184,6 +199,8 @@ function getPasar(){
     }
   });
 }
+
+
 </script>
 </body>
 </html>

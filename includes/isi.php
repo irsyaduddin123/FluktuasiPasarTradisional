@@ -488,7 +488,7 @@
                 datasets: [{
                     data: hargaData,
                     lineTension: 0,
-                    backgroundColor: 'transparent',
+                     
                     borderColor: borderColorArray,
                     borderWidth: 5,
                     label: 'Harga Kacang'
