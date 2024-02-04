@@ -33,10 +33,8 @@
                       </p>
                     </li>
                     <li class="user-footer">
-                      <div class="pull-left">
-                        <a href="profile.php" class="btn btn-default btn-flat">Profile</a>
-                      </div>
-                      <div class="pull-right">
+                      
+                      <div class="pull-center">
                         <a href="logout.php" class="btn btn-default btn-flat">Sign out</a>
                       </div>
                     </li>

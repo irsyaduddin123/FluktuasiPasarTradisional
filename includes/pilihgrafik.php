@@ -47,17 +47,14 @@
                             <div class="card-body">
                                 <div class="chart-bar">
                                     <?php
-                                    //   $conn = new mysqli('localhost', 'root', '', 'ppsi');
-                                    //   // include koneksi.php
-                                    //   $sql1 = "SELECT a.id, b.nama AS nama_barang, p.nama AS nama_pasar, a.harga, a.tanggal_input FROM harga_barang a JOIN barang b ON a.barang_id=b.id JOIN pasar p ON a.pasar_id=p.id WHERE a.barang_id = ?";
-                                    //   $nama_barang1 = $conn->query($sql1);
-                                    //   $nama_pasar1 = $conn->query($sql1);
-                                    //   $harga1 = $conn->query($sql1);
+
                                     ?>
                                         <canvas class="my-4 w-100" id="Linepilih" width="900" height="500"></canvas>
                                   </div>
                               </div>
                             </div>
+                        <div></div>
+                            <div><h4 id = "selisihHargaTerakhir"></h4></div>
                         </div>
                     </div>
                 </div>
@@ -98,66 +95,6 @@
 </div>
 
 
-<!-- <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var radioButtons = document.getElementsByName('barang_radio');
-
-        radioButtons.forEach(function(radio) {
-            radio.addEventListener('change', function() {
-                var selectedBarangId = this.value;
-
-                // Lakukan permintaan AJAX
-                var xhr = new XMLHttpRequest();
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState == 4 && xhr.status == 200) {
-                        // Terima data dari server
-                        var data = JSON.parse(xhr.responseText);
-
-                        // Perbarui grafik dengan data yang diterima
-                        updateChart(data);
-                    }
-                };
-
-                // Ganti URL dengan URL yang sesuai di server Anda
-                xhr.open('GET', 'get_chart_data.php?id=' + selectedBarangId, true);
-                xhr.send();
-            });
-        });
-
-        function updateChart(data) {
-            // Ambil elemen canvas grafik
-            var canvas = document.getElementById('Linepilih');
-            var ctx = canvas.getContext('2d');
-
-            // Hapus grafik sebelumnya jika ada
-            if (window.myChart) {
-                window.myChart.destroy();
-            }
-
-            // Buat grafik baru dengan data yang diterima
-            window.myChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: data.labels,
-                    datasets: [{
-                        label: 'Harga Barang',
-                        data: data.values,
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-        }
-    });
-</script> -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var radioButtons = document.getElementsByName('barang_radio');
@@ -185,70 +122,95 @@
         });
 
         function updateChart(data) {
-    // Ambil elemen canvas grafik
-    var canvas = document.getElementById('Linepilih');
-    var ctx = canvas.getContext('2d');
+// Ambil elemen canvas grafik
+var canvas = document.getElementById('Linepilih');
+var ctx = canvas.getContext('2d');
 
-    // Hapus grafik sebelumnya jika ada
-    if (window.myChart) {
-        window.myChart.destroy();
-    }
+// Hapus grafik sebelumnya jika ada
+if (window.myChart) {
+    window.myChart.destroy();
+}
 
-    // Ubah data.labels menjadi objek Date untuk memudahkan pengurutan
-    var dateLabels = data.labels.map(label => new Date(label));
+// Ubah data.labels menjadi objek Date untuk memudahkan pengurutan
+var dateLabels = data.labels.map(label => new Date(label));
 
-    // Lakukan pengurutan data berdasarkan tanggal (dari lama ke baru)
-    var sortedData = dateLabels.map((date, index) => ({
-        date: date,
-        value: data.values[index]
-    })).sort((a, b) => a.date - b.date);
+// Lakukan pengurutan data berdasarkan tanggal (dari lama ke baru)
+var sortedData = dateLabels.map((date, index) => ({
+    date: date,
+    value: data.values[index]
+})).sort((a, b) => a.date - b.date);
 
-    // Pisahkan kembali tanggal dan nilai setelah pengurutan
-    var sortedLabels = sortedData.map(item => item.date.toISOString().split('T')[0]);
-    var sortedValues = sortedData.map(item => item.value);
+// Pisahkan kembali tanggal dan nilai setelah pengurutan
+var sortedLabels = sortedData.map(item => item.date.toISOString().split('T')[0]);
+var sortedValues = sortedData.map(item => item.value);
 
-    // Tentukan warna berdasarkan perubahan nilai
-    var colors = [];
+// Tentukan warna berdasarkan perubahan nilai
+var colors = [];
 
-    for (var i = 0; i < sortedData.length; i++) {
-        if (i > 0) {
-            // Bandingkan nilai saat ini dengan nilai sebelumnya
-            if (sortedData[i].value > sortedData[i - 1].value) {
-                // Jika lebih tinggi, beri warna hijau
-                colors.push('#00ff00');
-            } else if (sortedData[i].value < sortedData[i - 1]){
-                // Jika lebih rendah, beri warna merah
-                colors.push('#ff0000');
-            }else {
-                colors.push(sortedData[i].value > sortedData[i - 1].value); // Warna default jika harga sama
-            }
+// Hitung selisih harga terakhir dengan harga sebelumnya
+var priceDifference = 0;
+
+for (var i = 0; i < sortedData.length; i++) {
+    if (i > 0) {
+        // Bandingkan nilai saat ini dengan nilai sebelumnya
+        if (sortedData[i].value > sortedData[i - 1].value) {
+            // Jika lebih tinggi, beri warna hijau
+            colors.push('#00ff00');
+        } else if (sortedData[i].value < sortedData[i - 1]){
+            // Jika lebih rendah, beri warna merah
+            colors.push('#ff0000');
         } else {
-            // Untuk titik pertama, beri warna default (misalnya, hijau)
-            colors.push('#007bff');
+            colors.push(sortedData[i].value > sortedData[i - 1].value); // Warna default jika harga sama
         }
-    }
 
-    // Buat grafik baru dengan data yang sudah diurutkan dan warna yang ditentukan
-    window.myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: sortedLabels,
-            datasets: [{
-                label: 'Harga Barang',
-                data: sortedValues,
-                fill: false,
-                borderColor: colors, // Gunakan array warna yang sudah ditentukan
-                borderWidth: 5
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
+        // Hitung selisih harga terakhir dengan harga sebelumnya
+        priceDifference = sortedValues[i] - sortedValues[i - 1];
+    } else {
+        // Untuk titik pertama, beri warna default (misalnya, hijau)
+        colors.push('#007bff');
+    }
+}
+
+// Buat grafik baru dengan data yang sudah diurutkan dan warna yang ditentukan
+window.myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: sortedLabels,
+        datasets: [{
+            label: 'Harga Barang',
+            data: sortedValues,
+            fill: false,
+            borderColor: colors, // Gunakan array warna yang sudah ditentukan
+            borderWidth: 5
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
             }
         }
-    });
+    }
+});
+
+
+
+// Mendapatkan elemen HTML untuk menampilkan status harga naik atau turun
+var statusHargaElemen = document.getElementById('statusHarga');
+
+// Menentukan apakah harga terakhir naik atau turun
+var statusHarga = '';
+if (priceDifference > 0) {
+    statusHarga = 'Naik';
+} else if (priceDifference < 0) {
+    statusHarga = 'Turun';
+} else {
+    statusHarga = 'Sama';
+}
+
+// Menampilkan hasil perhitungan di elemen HTML
+document.getElementById('selisihHargaTerakhir').innerHTML = ' Status Terakhir: ' + statusHarga+ ' sebesar ' + priceDifference  ;
+
 }
 
     });

@@ -436,6 +436,7 @@
         var ctx = document.getElementById("myLineChart1");
         var hargaData = [<?php while($a = mysqli_fetch_array($harga1)) { echo $a['harga'] . ', '; } ?>];
         var namaBarangData = [<?php while($b = mysqli_fetch_array($nama_barang1)) { echo '"' . $b['tanggal_input'] . '",'; } ?>];
+        var namaBarangnama = [<?php while($d = mysqli_fetch_array($nama_barang1)) { echo '"' . $d['nama'] . '",'; } ?>];
         var namaPasarData = [<?php while($c = mysqli_fetch_array($nama_pasar1)) { echo '"' . $c['nama_pasar'] . '",'; } ?>];
 
         var borderColorArray = [];
@@ -444,7 +445,7 @@
         // Membuat array objek untuk pengurutan
         var combinedData = [];
         for (var i = 0; i < hargaData.length; i++) {
-            combinedData.push({ harga: hargaData[i], tanggal: namaBarangData[i], pasar: namaPasarData[i] });
+            combinedData.push({ harga: hargaData[i], tanggal: namaBarangData[i], pasar: namaPasarData[i], nama: namaBarangnama[i] });
         }
 
         // Mengurutkan array combinedData berdasarkan tanggal
@@ -459,6 +460,7 @@
         // Mengekstrak array hargaData dan namaBarangData yang telah diurutkan
         hargaData = combinedData.map(item => item.harga);
         namaBarangData = combinedData.map(item => item.tanggal);
+        
         namaPasarData = combinedData.map(item => item.pasar);
 
         var minPriceIndex = hargaData.indexOf(Math.min(...hargaData));
@@ -499,7 +501,7 @@
                      
                     borderColor: borderColorArray,
                     borderWidth: 5,
-                    label: 'Harga Kacang'
+                    label: 'kacang'
                 }]
             },
             options: {
@@ -876,7 +878,7 @@
                     backgroundColor: 'transparent',
                     borderColor: borderColorArray,
                     borderWidth: 5,
-                    label: 'Harga Minyak'
+                    label: 'Harga Ikan asin'
 
                 }]
             },
@@ -967,7 +969,7 @@
                     backgroundColor: 'transparent',
                     borderColor: borderColorArray,
                     borderWidth: 5,
-                    label: 'Harga Minyak'
+                    label: 'Harga Kerupuk'
 
                 }]
             },
@@ -1058,7 +1060,7 @@
                     backgroundColor: 'transparent',
                     borderColor: borderColorArray,
                     borderWidth: 5,
-                    label: 'Harga Minyak'
+                    label: 'Harga Gula'
 
                 }]
             },
@@ -1149,7 +1151,7 @@
                     backgroundColor: 'transparent',
                     borderColor: borderColorArray,
                     borderWidth: 5,
-                    label: 'Harga Minyak'
+                    label: 'Harga Tepung Terigu'
 
                 }]
             },
